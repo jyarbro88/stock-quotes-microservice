@@ -10,7 +10,8 @@ public class DailyStockModel {
     @Id
     @GeneratedValue
     private Long id;
-    private String symbol;
+    private String tickerSymbol;
+    private String companyName;
     private Integer totalVolumeTradedForDay;
     private Double highPriceForDay;
     private Double lowPriceForDay;
@@ -23,8 +24,8 @@ public class DailyStockModel {
     public DailyStockModel() {
     }
 
-    public DailyStockModel(String symbol, Integer totalVolumeTradedForDay, Double highPriceForDay, Double lowPriceForDay, Double openingPriceForDay, Double closingPriceForDay) {
-        this.symbol = symbol;
+    public DailyStockModel(String tickerSymbol, Integer totalVolumeTradedForDay, Double highPriceForDay, Double lowPriceForDay, Double openingPriceForDay, Double closingPriceForDay) {
+        this.tickerSymbol = tickerSymbol;
         this.totalVolumeTradedForDay = totalVolumeTradedForDay;
         this.highPriceForDay = highPriceForDay;
         this.lowPriceForDay = lowPriceForDay;
@@ -48,12 +49,20 @@ public class DailyStockModel {
         this.quoteModelList = quoteModelList;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getTickerSymbol() {
+        return tickerSymbol;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public Integer getTotalVolumeTradedForDay() {
@@ -76,7 +85,9 @@ public class DailyStockModel {
         return lowPriceForDay;
     }
 
-    public void setLowPriceForDay(Double lowPriceForDay) { this.lowPriceForDay = lowPriceForDay; }
+    public void setLowPriceForDay(Double lowPriceForDay) {
+        this.lowPriceForDay = lowPriceForDay;
+    }
 
     public Double getOpeningPriceForDay() {
         return openingPriceForDay;
@@ -96,10 +107,16 @@ public class DailyStockModel {
 
     @Override
     public String toString() {
-        return "High Price For The Day: " + getHighPriceForDay()
-                + "\nLow Price For The Day: " + getLowPriceForDay()
-                + "\nTotal Volume Traded: " + getTotalVolumeTradedForDay()
-                + "\nOpening Price: " + getOpeningPriceForDay()
-                + "\nClosing Price: " + getClosingPriceForDay();
+        return
+                "      Daily Stats for Ticker Symbol: " + getTickerSymbol() +
+                "\n\n      Name of Company: " + getCompanyName() +
+                        "\n------------------------------------" +
+                        "\nHigh Price For The Day:   $" + getHighPriceForDay() +
+                        "\nLow Price For The Day:    $" + getLowPriceForDay() +
+                        "\n------------------------------------" +
+                        "\nTotal Volume Traded:      " + getTotalVolumeTradedForDay() +
+                        "\n------------------------------------" +
+                        "\nOpening Price:            $" + getOpeningPriceForDay() +
+                        "\nClosing Price:            $" + getClosingPriceForDay();
     }
 }

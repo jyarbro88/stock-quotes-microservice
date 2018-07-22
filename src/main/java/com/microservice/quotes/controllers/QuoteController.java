@@ -28,11 +28,11 @@ public class QuoteController {
         this.quoteRepository = quoteRepository;
     }
 
-    @GetMapping(value = {"/getAllQuotes"}, produces = {"application/json"})
-    @ResponseBody
-    public List<QuoteModel> showAllStocks() {
-        return quoteRepository.findAll();
-    }
+//    @GetMapping(value = {"/getAllQuotes"}, produces = {"application/json"})
+//    @ResponseBody
+//    public List<QuoteModel> showAllStocks() {
+//        return quoteRepository.findAll();
+//    }
 
     @GetMapping(
             value = {"/lookUpSymbol/{stockId}"},
@@ -69,9 +69,11 @@ public class QuoteController {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.getBody());
         JsonNode companySymbol = root.path("symbol");
+        JsonNode companyName = root.path("companyName");
 
         DailyStockModel dailyStockModel = getDailyStockModel(stockId, dateToSearch);
-
+        dailyStockModel.setTickerSymbol(String.valueOf(companySymbol));
+        dailyStockModel.setCompanyName(String.valueOf(companyName));
         return dailyStockModel.toString();
     }
 
@@ -80,17 +82,48 @@ public class QuoteController {
     private DailyStockModel getDailyStockModel(String stockId, Date dateToSearch) {
         List<QuoteModel> listOfLowestPrices = quoteRepository.findLowestPrice(stockId, dateToSearch);
         List<QuoteModel> listOfHighestPrices = quoteRepository.findHighestPrice(stockId, dateToSearch);
-        Integer totalVolume = quoteRepository.findTotalVolume(stockId, dateToSearch);
+        QuoteModel closingPriceModel = quoteRepository.findClosingPrice(stockId, dateToSearch);
+        QuoteModel openingPriceModel = quoteRepository.findOpeningPrice(stockId, dateToSearch);
 
+        List<QuoteModel> listOfQuotesFoundBySymbolAndDate = quoteRepository.findAllBySymbolAndDate(stockId, dateToSearch);
+
+//        Integer totalVolume = quoteRepository.totalVolume(stockId, dateToSearch);
         DailyStockModel dailyStockModel = new DailyStockModel();
 
-        QuoteModel highPriceModel = listOfHighestPrices.get(0);
-        QuoteModel lowPriceModel = listOfLowestPrices.get(0);
+        Double highPrice = 0.00;
+        Double lowPrice = 1000000.00;
+        Integer volumeTradedForDay = 0;
+
+        for (QuoteModel tempQuoteModel : listOfQuotesFoundBySymbolAndDate) {
+            Double price = tempQuoteModel.getPrice();
+            Integer volume = tempQuoteModel.getVolume();
+
+            if (price > highPrice) {
+                highPrice = price;
+            }
+            if (price < lowPrice) {
+                lowPrice = price;
+            }
+            volumeTradedForDay += volume;
+        }
+
+
+
+//        QuoteModel highPriceModel = listOfHighestPrices.get(0);
+//        QuoteModel lowPriceModel = listOfLowestPrices.get(0);
 //        QuoteModel totalVolumeModel = totalVolume.get(0);
 //        dailyStockModel.setTotalVolumeTradedForDay(totalVolumeModel.getVolume());
-        dailyStockModel.setTotalVolumeTradedForDay(totalVolume);
-        dailyStockModel.setLowPriceForDay(lowPriceModel.getPrice());
-        dailyStockModel.setHighPriceForDay(highPriceModel.getPrice());
+//        dailyStockModel.setTotalVolumeTradedForDay(totalVolume);
+
+        dailyStockModel.setHighPriceForDay(highPrice);
+        dailyStockModel.setLowPriceForDay(lowPrice);
+        dailyStockModel.setTotalVolumeTradedForDay(volumeTradedForDay);
+
+//        dailyStockModel.setLowPriceForDay(lowPriceModel.getPrice());
+//        dailyStockModel.setHighPriceForDay(highPriceModel.getPrice());
+        dailyStockModel.setClosingPriceForDay(closingPriceModel.getPrice());
+        dailyStockModel.setOpeningPriceForDay(openingPriceModel.getPrice());
+
         return dailyStockModel;
     }
 }
