@@ -76,9 +76,7 @@ public class DailyStockModel {
         return lowPriceForDay;
     }
 
-    public void setLowPriceForDay(Double lowPriceForDay) {
-        this.lowPriceForDay = lowPriceForDay;
-    }
+    public void setLowPriceForDay(Double lowPriceForDay) { this.lowPriceForDay = lowPriceForDay; }
 
     public Double getOpeningPriceForDay() {
         return openingPriceForDay;
@@ -94,5 +92,14 @@ public class DailyStockModel {
 
     public void setClosingPriceForDay(Double closingPriceForDay) {
         this.closingPriceForDay = closingPriceForDay;
+    }
+
+    @Override
+    public String toString() {
+        return "High Price For The Day: " + getHighPriceForDay()
+                + "\nLow Price For The Day: " + getLowPriceForDay()
+                + "\nTotal Volume Traded: " + getTotalVolumeTradedForDay()
+                + "\nOpening Price: " + getOpeningPriceForDay()
+                + "\nClosing Price: " + getClosingPriceForDay();
     }
 }

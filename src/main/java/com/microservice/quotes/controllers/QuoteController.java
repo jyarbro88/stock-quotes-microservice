@@ -2,6 +2,7 @@ package com.microservice.quotes.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservice.quotes.models.DailyStockModel;
 import com.microservice.quotes.models.QuoteModel;
 import com.microservice.quotes.repositories.QuoteRepository;
 import com.netflix.discovery.EurekaClient;
@@ -33,13 +34,6 @@ public class QuoteController {
         return quoteRepository.findAll();
     }
 
-
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
     @GetMapping(
             value = {"/lookUpSymbol/{stockId}"},
             produces = {"application/json"})
@@ -62,7 +56,7 @@ public class QuoteController {
             value = {"/{stockId}/{dateToSearch}"},
             produces = {"application/json"} )
     @ResponseBody
-    public List<QuoteModel> findSymbolByIdAndDate(
+    public String findSymbolByIdAndDate(
             @PathVariable(name = "stockId") String stockId,
             @PathVariable("dateToSearch")
             @DateTimeFormat(pattern = "dd-MM-yyyy") Date dateToSearch
@@ -76,8 +70,27 @@ public class QuoteController {
         JsonNode root = mapper.readTree(response.getBody());
         JsonNode companySymbol = root.path("symbol");
 
+        DailyStockModel dailyStockModel = getDailyStockModel(stockId, dateToSearch);
 
-//        return quoteRepository.findMinAndMax(stockId, dateToSearch);
-        return quoteRepository.findAllBySymbolAndDate(stockId, dateToSearch);
+        return dailyStockModel.toString();
+    }
+
+
+
+    private DailyStockModel getDailyStockModel(String stockId, Date dateToSearch) {
+        List<QuoteModel> listOfLowestPrices = quoteRepository.findLowestPrice(stockId, dateToSearch);
+        List<QuoteModel> listOfHighestPrices = quoteRepository.findHighestPrice(stockId, dateToSearch);
+        Integer totalVolume = quoteRepository.findTotalVolume(stockId, dateToSearch);
+
+        DailyStockModel dailyStockModel = new DailyStockModel();
+
+        QuoteModel highPriceModel = listOfHighestPrices.get(0);
+        QuoteModel lowPriceModel = listOfLowestPrices.get(0);
+//        QuoteModel totalVolumeModel = totalVolume.get(0);
+//        dailyStockModel.setTotalVolumeTradedForDay(totalVolumeModel.getVolume());
+        dailyStockModel.setTotalVolumeTradedForDay(totalVolume);
+        dailyStockModel.setLowPriceForDay(lowPriceModel.getPrice());
+        dailyStockModel.setHighPriceForDay(highPriceModel.getPrice());
+        return dailyStockModel;
     }
 }
