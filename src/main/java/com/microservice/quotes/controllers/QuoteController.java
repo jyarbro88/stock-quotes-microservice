@@ -7,8 +7,11 @@ import com.microservice.quotes.utilities.MicroServiceConnector;
 import com.microservice.quotes.utilities.StockModelBuilder;
 import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Date;
@@ -17,6 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping(value = {"/dailyStockQuotes"})
 public class QuoteController {
+
+    @Autowired
+    RestTemplate restTemplate;
 
     private EurekaClient discoveryClient;
 
@@ -36,7 +42,7 @@ public class QuoteController {
         MicroServiceConnector microServiceConnector = new MicroServiceConnector();
         StockModelBuilder stockModelBuilder = new StockModelBuilder(quoteRepository);
 
-        List<JsonNode> tickerSymbolAndCompanyName = microServiceConnector.getTickerSymbolAndCompanyName(stockId);
+        List<JsonNode> tickerSymbolAndCompanyName = microServiceConnector.getTickerSymbolAndCompanyName(stockId, restTemplate);
 
         JsonNode companySymbol = tickerSymbolAndCompanyName.get(0);
         JsonNode companyName = tickerSymbolAndCompanyName.get(1);
@@ -45,5 +51,11 @@ public class QuoteController {
         dailyStockModel.setTickerSymbol(String.valueOf(companySymbol));
         dailyStockModel.setCompanyName(String.valueOf(companyName));
         return dailyStockModel.toString();
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 }
