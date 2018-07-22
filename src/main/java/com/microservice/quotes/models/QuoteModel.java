@@ -1,23 +1,30 @@
 package com.microservice.quotes.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.text.SimpleDateFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "stock_data")
 public class QuoteModel {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String symbol;
+    @Column(name = "symbol")
+    private Long symbol;
+    @Column(name = "price")
     private Double price;
+    @Column(name = "volume")
     private Integer volume;
-    private String date;
+    @Column(name = "trading_date")
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date date;
 
-    public QuoteModel(String symbol, Double price, Integer volume, String date) {
+    public QuoteModel(Long symbol, Double price, Integer volume, Date date) {
         this.symbol = symbol;
         this.price = price;
         this.volume = volume;
@@ -35,11 +42,11 @@ public class QuoteModel {
         this.id = id;
     }
 
-    public String getSymbol() {
+    public Long getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(String symbol) {
+    public void setSymbol(Long symbol) {
         this.symbol = symbol;
     }
 
@@ -59,11 +66,11 @@ public class QuoteModel {
         this.volume = volume;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

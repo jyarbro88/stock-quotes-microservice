@@ -2,6 +2,8 @@ package com.microservice.quotes.models;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 public class DailyStockModel {
 
@@ -14,6 +16,9 @@ public class DailyStockModel {
     private Double lowPriceForDay;
     private Double openingPriceForDay;
     private Double closingPriceForDay;
+
+    @OneToMany
+    private List<QuoteModel> quoteModelList;
 
     public DailyStockModel() {
     }
@@ -33,6 +38,14 @@ public class DailyStockModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<QuoteModel> getQuoteModelList() {
+        return quoteModelList;
+    }
+
+    public void setQuoteModelList(List<QuoteModel> quoteModelList) {
+        this.quoteModelList = quoteModelList;
     }
 
     public String getSymbol() {
