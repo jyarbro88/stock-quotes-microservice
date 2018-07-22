@@ -111,12 +111,12 @@ public class DailyStockModel {
                 "Daily Stats for Ticker Symbol: " + getTickerSymbol() +
                 "\n\n      Name of Company: " + getCompanyName() +
                         "\n------------------------------------" +
-                        "\nHigh Price For The Day:   $" + getHighPriceForDay() +
-                        "\nLow Price For The Day:    $" + getLowPriceForDay() +
+                        "\nHigh Price For The Day:     $" + getHighPriceForDay() +
+                        "\nLow Price For The Day:      $" + getLowPriceForDay() +
                         "\n------------------------------------" +
-                        "\nTotal Volume Traded:      " + getTotalVolumeTradedForDay() +
+                        "\nTotal Volume Traded:        " + getTotalVolumeTradedForDay() +
                         "\n------------------------------------" +
-                        "\nOpening Price:            $" + getOpeningPriceForDay() +
-                        "\nClosing Price:            $" + getClosingPriceForDay();
+                        "\nOpening Price:              $" + getOpeningPriceForDay() +
+                        "\nClosing Price:              $" + getClosingPriceForDay();
     }
 }
