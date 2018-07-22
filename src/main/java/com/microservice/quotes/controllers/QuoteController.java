@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +45,7 @@ public class QuoteController {
             produces = {"application/json"})
     @ResponseBody
     public String findSymbolById(
-            @PathVariable(name = "stockId") Long stockId
+            @PathVariable(name = "stockId") String stockId
     ) throws IOException {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -63,11 +59,11 @@ public class QuoteController {
     }
 
     @GetMapping(
-            value = {"/dailyStockQuotes/{stockId}/{dateToSearch}"},
+            value = {"/{stockId}/{dateToSearch}"},
             produces = {"application/json"} )
     @ResponseBody
     public List<QuoteModel> findSymbolByIdAndDate(
-            @PathVariable(name = "stockId") Long stockId,
+            @PathVariable(name = "stockId") String stockId,
             @PathVariable("dateToSearch")
             @DateTimeFormat(pattern = "dd-MM-yyyy") Date dateToSearch
             ) throws IOException {
@@ -81,8 +77,7 @@ public class QuoteController {
         JsonNode companySymbol = root.path("symbol");
 
 
+//        return quoteRepository.findMinAndMax(stockId, dateToSearch);
         return quoteRepository.findAllBySymbolAndDate(stockId, dateToSearch);
     }
-
-
 }

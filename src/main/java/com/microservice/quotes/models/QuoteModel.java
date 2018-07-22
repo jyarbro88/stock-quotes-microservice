@@ -14,7 +14,7 @@ public class QuoteModel {
     @GeneratedValue
     private Long id;
     @Column(name = "symbol")
-    private Long symbol;
+    private String symbol;
     @Column(name = "price")
     private Double price;
     @Column(name = "volume")
@@ -24,7 +24,7 @@ public class QuoteModel {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date date;
 
-    public QuoteModel(Long symbol, Double price, Integer volume, Date date) {
+    public QuoteModel(String symbol, Double price, Integer volume, Date date) {
         this.symbol = symbol;
         this.price = price;
         this.volume = volume;
@@ -42,11 +42,11 @@ public class QuoteModel {
         this.id = id;
     }
 
-    public Long getSymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(Long symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 
