@@ -108,7 +108,7 @@ public class DailyStockModel {
     @Override
     public String toString() {
         return
-                "      Daily Stats for Ticker Symbol: " + getTickerSymbol() +
+                "Daily Stats for Ticker Symbol: " + getTickerSymbol() +
                 "\n\n      Name of Company: " + getCompanyName() +
                         "\n------------------------------------" +
                         "\nHigh Price For The Day:   $" + getHighPriceForDay() +
