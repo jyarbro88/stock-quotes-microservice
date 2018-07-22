@@ -61,20 +61,16 @@ public class QuoteController {
         JsonNode companySymbol = root.path("symbol");
         return String.valueOf(companySymbol);
     }
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------
+
     @GetMapping(
-            value = {"/findAll/{stockId}/{dateToSearch}"},
+            value = {"/dailyStockQuotes/{stockId}/{dateToSearch}"},
             produces = {"application/json"} )
     @ResponseBody
     public List<QuoteModel> findSymbolByIdAndDate(
             @PathVariable(name = "stockId") Long stockId,
-            @PathVariable("dateToSearch") @DateTimeFormat(pattern = "dd-MM-yyyy") Date dateToSearch
-//            @DateTimeFormat(pattern = "dd-MM-yyyy") String dateToSearch
-            ) throws IOException, ParseException {
+            @PathVariable("dateToSearch")
+            @DateTimeFormat(pattern = "dd-MM-yyyy") Date dateToSearch
+            ) throws IOException {
 
         RestTemplate restTemplate = new RestTemplate();
         String stockKeyUrl = "http://localhost:8081/stockSymbolKey/" + stockId;
@@ -84,14 +80,9 @@ public class QuoteController {
         JsonNode root = mapper.readTree(response.getBody());
         JsonNode companySymbol = root.path("symbol");
 
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-//
-//        String formattedDate = formatter.format(dateToSearch);
-//
-//        Date date = new Date();
-//
-//        new Date(formattedDate);
-//        Date parsedDateToSearch = formatter.parse(dateToSearch);
+
         return quoteRepository.findAllBySymbolAndDate(stockId, dateToSearch);
     }
+
+
 }
