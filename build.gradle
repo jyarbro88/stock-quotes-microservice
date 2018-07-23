@@ -31,16 +31,9 @@ ext {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-hateoas')
     compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
-    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
-    compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
-    compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard')
-    compile('org.springframework.cloud:spring-cloud-starter-netflix-zuul')
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-service-registry', version: '2.0.1.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka-server', version: '1.4.5.RELEASE'
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('com.h2database:h2')
     runtime('mysql:mysql-connector-java')
