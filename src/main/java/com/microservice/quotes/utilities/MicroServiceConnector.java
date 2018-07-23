@@ -15,17 +15,19 @@ public class MicroServiceConnector {
 
     public MicroServiceConnector() { }
 
-    public List<JsonNode> getTickerSymbolAndCompanyName(String stockId, RestTemplate restTemplate) throws IOException {
+    public List<String> getTickerSymbolAndCompanyName(String stockSymbolToFind, RestTemplate restTemplate) throws IOException {
 
-        List<JsonNode> companyInfoList = new ArrayList<>();
-        String eurekaInstanceOfStocksApp = "http://stocks-app/stockSymbolKey/" + stockId;
+        List<String> companyInfoList = new ArrayList<>();
+        String eurekaInstanceOfStocksApp = "http://stocks-app/stockSymbolKey/" + stockSymbolToFind;
 
         ResponseEntity<String> response = restTemplate.getForEntity(eurekaInstanceOfStocksApp, String.class);
         JsonNode root = mapper.readTree(response.getBody());
-        JsonNode companySymbol = root.path("symbol");
-        JsonNode companyName = root.path("companyName");
+        String stockId = root.path("id").textValue();
+        String stockSymbol = root.path("symbol").textValue();
+        String companyName = root.path("companyName").textValue();
 
-        companyInfoList.add(companySymbol);
+        companyInfoList.add(stockId);
+        companyInfoList.add(stockSymbol);
         companyInfoList.add(companyName);
 
         return companyInfoList;
