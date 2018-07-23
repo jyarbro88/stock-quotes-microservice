@@ -1,12 +1,15 @@
 package com.microservice.quotes.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Getter @Setter @NoArgsConstructor
 @Table(name = "stock_data")
 public class QuoteModel {
 
@@ -24,53 +27,4 @@ public class QuoteModel {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date date;
 
-    public QuoteModel(String symbol, Double price, Integer volume, Date date) {
-        this.symbol = symbol;
-        this.price = price;
-        this.volume = volume;
-        this.date = date;
-    }
-
-    public QuoteModel() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getVolume() {
-        return volume;
-    }
-
-    public void setVolume(Integer volume) {
-        this.volume = volume;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }
