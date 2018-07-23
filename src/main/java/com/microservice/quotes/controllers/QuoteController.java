@@ -1,6 +1,5 @@
 package com.microservice.quotes.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.microservice.quotes.models.DailyStockModel;
 import com.microservice.quotes.models.QuoteModel;
 import com.microservice.quotes.repositories.QuoteRepository;
@@ -36,26 +35,30 @@ public class QuoteController {
     }
 
     @GetMapping(
-            value = {"/{stockId}/{dateToSearch}"},
+            value = {"/{stockSymbolToFind}/{dateToSearch}"},
             produces = {"application/json"} )
     @ResponseBody
     public String findSymbolByIdAndDate(
-            @PathVariable(name = "stockId") String stockId,
+            @PathVariable(name = "stockSymbolToFind") String stockSymbolToFind,
             @PathVariable("dateToSearch")
             @DateTimeFormat(pattern = "dd-MM-yyyy") Date dateToSearch
             ) throws IOException {
 
+        String symbolToFind = stockSymbolToFind.toUpperCase();
         MicroServiceConnector microServiceConnector = new MicroServiceConnector();
         StockModelBuilder stockModelBuilder = new StockModelBuilder(quoteRepository);
 
-        List<JsonNode> tickerSymbolAndCompanyName = microServiceConnector.getTickerSymbolAndCompanyName(stockId, restTemplate);
+        List<String> tickerSymbolAndCompanyName = microServiceConnector.getTickerSymbolAndCompanyName(symbolToFind, restTemplate);
 
-        JsonNode companySymbol = tickerSymbolAndCompanyName.get(0);
-        JsonNode companyName = tickerSymbolAndCompanyName.get(1);
+        String stockId = tickerSymbolAndCompanyName.get(0);
+        String stockSymbol = tickerSymbolAndCompanyName.get(1);
+        String companyName = tickerSymbolAndCompanyName.get(2);
+
 
         DailyStockModel dailyStockModel = stockModelBuilder.buildDailyStockModel(stockId, dateToSearch);
-        dailyStockModel.setTickerSymbol(String.valueOf(companySymbol));
-        dailyStockModel.setCompanyName(String.valueOf(companyName));
+        dailyStockModel.setTickerSymbol(stockSymbol);
+        dailyStockModel.setCompanyName(companyName);
+
         return dailyStockModel.toString();
     }
 }
