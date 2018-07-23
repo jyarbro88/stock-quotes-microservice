@@ -3,7 +3,6 @@ package com.microservice.quotes.utilities;
 import com.microservice.quotes.models.DailyStockModel;
 import com.microservice.quotes.models.QuoteModel;
 import com.microservice.quotes.repositories.QuoteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +11,6 @@ public class StockModelBuilder {
 
     private final QuoteRepository quoteRepository;
 
-    @Autowired
     public StockModelBuilder(QuoteRepository quoteRepository) {
         this.quoteRepository = quoteRepository;
     }
