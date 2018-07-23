@@ -24,8 +24,6 @@ public class QuoteController {
     @Autowired
     RestTemplate restTemplate;
 
-    private EurekaClient discoveryClient;
-
     @Autowired
     private QuoteRepository quoteRepository;
 

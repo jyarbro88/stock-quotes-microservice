@@ -3,14 +3,12 @@ package com.microservice.quotes.utilities;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
 public class MicroServiceConnector {
 
     private ObjectMapper mapper = new ObjectMapper();
