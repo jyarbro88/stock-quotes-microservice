@@ -2,8 +2,9 @@ package com.microservice.quotes.models;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class DailyStockModel {
 
@@ -18,35 +19,9 @@ public class DailyStockModel {
     private Double openingPriceForDay;
     private Double closingPriceForDay;
 
-    @OneToMany
-    private List<QuoteModel> quoteModelList;
+    private static DecimalFormat df2 = new DecimalFormat(".##");
 
     public DailyStockModel() {
-    }
-
-    public DailyStockModel(String tickerSymbol, Integer totalVolumeTradedForDay, Double highPriceForDay, Double lowPriceForDay, Double openingPriceForDay, Double closingPriceForDay) {
-        this.tickerSymbol = tickerSymbol;
-        this.totalVolumeTradedForDay = totalVolumeTradedForDay;
-        this.highPriceForDay = highPriceForDay;
-        this.lowPriceForDay = lowPriceForDay;
-        this.openingPriceForDay = openingPriceForDay;
-        this.closingPriceForDay = closingPriceForDay;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<QuoteModel> getQuoteModelList() {
-        return quoteModelList;
-    }
-
-    public void setQuoteModelList(List<QuoteModel> quoteModelList) {
-        this.quoteModelList = quoteModelList;
     }
 
     public String getTickerSymbol() {
@@ -105,18 +80,20 @@ public class DailyStockModel {
         this.closingPriceForDay = closingPriceForDay;
     }
 
+
+
     @Override
     public String toString() {
         return
                 "Daily Stats for Ticker Symbol: " + getTickerSymbol() +
                 "\n\n      Name of Company: " + getCompanyName() +
                         "\n------------------------------------" +
-                        "\nHigh Price For The Day:     $" + getHighPriceForDay() +
-                        "\nLow Price For The Day:      $" + getLowPriceForDay() +
+                        "\nHigh Price For The Day:     $" + df2.format(getHighPriceForDay()) +
+                        "\nLow Price For The Day:      $" + String.format( "%.2f", getLowPriceForDay()) +
                         "\n------------------------------------" +
-                        "\nTotal Volume Traded:        " + getTotalVolumeTradedForDay() +
+                        "\nTotal Volume Traded:        " + NumberFormat.getNumberInstance(Locale.US).format(getTotalVolumeTradedForDay()) +
                         "\n------------------------------------" +
-                        "\nOpening Price:              $" + getOpeningPriceForDay() +
-                        "\nClosing Price:              $" + getClosingPriceForDay();
+                        "\nOpening Price:              $" + df2.format(getOpeningPriceForDay()) +
+                        "\nClosing Price:              $" + df2.format(getClosingPriceForDay());
     }
 }
