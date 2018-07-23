@@ -2,10 +2,10 @@ package com.microservice.quotes.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.microservice.quotes.models.DailyStockModel;
+import com.microservice.quotes.models.QuoteModel;
 import com.microservice.quotes.repositories.QuoteRepository;
 import com.microservice.quotes.utilities.MicroServiceConnector;
 import com.microservice.quotes.utilities.StockModelBuilder;
-import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +26,16 @@ public class QuoteController {
 
     @Autowired
     private QuoteRepository quoteRepository;
+
+    @GetMapping(
+            value = {"/allStocks"},
+            produces = {"application/json"}
+    )
+    @ResponseBody
+    public List<QuoteModel> displayAll(){
+
+        return quoteRepository.findAll();
+    }
 
     @GetMapping(
             value = {"/{stockId}/{dateToSearch}"},

@@ -41,6 +41,7 @@ public class StockModelBuilder {
             volumeTradedForDay += volume;
         }
 
+        dailyStockModel.setSearchDate(dateToSearch);
         dailyStockModel.setHighPriceForDay(highPrice);
         dailyStockModel.setLowPriceForDay(lowPrice);
         dailyStockModel.setTotalVolumeTradedForDay(volumeTradedForDay);
