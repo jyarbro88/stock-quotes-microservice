@@ -21,6 +21,7 @@ public class MicroServiceConnector {
         String eurekaInstanceOfStocksApp = "http://stocks-app/stockSymbolKey/" + stockSymbolToFind;
 
         ResponseEntity<String> response = restTemplate.getForEntity(eurekaInstanceOfStocksApp, String.class);
+
         JsonNode root = mapper.readTree(response.getBody());
         String stockId = root.path("id").textValue();
         String stockSymbol = root.path("symbol").textValue();

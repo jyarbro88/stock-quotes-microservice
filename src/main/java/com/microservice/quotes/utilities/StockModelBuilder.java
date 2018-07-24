@@ -3,6 +3,7 @@ package com.microservice.quotes.utilities;
 import com.microservice.quotes.models.DailyStockModel;
 import com.microservice.quotes.models.QuoteModel;
 import com.microservice.quotes.repositories.QuoteRepository;
+import com.sun.org.apache.xpath.internal.operations.Quo;
 
 import java.util.Date;
 import java.util.List;
@@ -22,31 +23,28 @@ public class StockModelBuilder {
         QuoteModel closingPriceModel = quoteRepository.findClosingPrice(stockId, dateToSearch);
         QuoteModel openingPriceModel = quoteRepository.findOpeningPrice(stockId, dateToSearch);
 
+        List<QuoteModel> lowPriceForTheDay = quoteRepository.findLowPriceForTheDay(stockId, dateToSearch);
+        List<QuoteModel> highPriceForTheDay = quoteRepository.findHighPriceForTheDay(stockId, dateToSearch);
+
+        QuoteModel lowPriceModel = lowPriceForTheDay.get(0);
+        QuoteModel highPriceModel = highPriceForTheDay.get(0);
+
         List<QuoteModel> listOfQuotesFoundBySymbolAndDate = quoteRepository.findAllBySymbolAndDate(stockId, dateToSearch);
 
-        Double highPrice = 0.00;
-        Double lowPrice = 1000000.00;
         Integer volumeTradedForDay = 0;
 
         for (QuoteModel tempQuoteModel : listOfQuotesFoundBySymbolAndDate) {
-            Double price = tempQuoteModel.getPrice();
             Integer volume = tempQuoteModel.getVolume();
 
-            if (price > highPrice) {
-                highPrice = price;
-            }
-            if (price < lowPrice) {
-                lowPrice = price;
-            }
             volumeTradedForDay += volume;
         }
 
+        dailyStockModel.setLowPriceForDay(lowPriceModel.getPrice());
+        dailyStockModel.setHighPriceForDay(highPriceModel.getPrice());
         dailyStockModel.setSearchDate(dateToSearch);
-        dailyStockModel.setHighPriceForDay(highPrice);
-        dailyStockModel.setLowPriceForDay(lowPrice);
-        dailyStockModel.setTotalVolumeTradedForDay(volumeTradedForDay);
         dailyStockModel.setClosingPriceForDay(closingPriceModel.getPrice());
         dailyStockModel.setOpeningPriceForDay(openingPriceModel.getPrice());
+        dailyStockModel.setTotalVolumeTradedForDay(volumeTradedForDay);
 
         return dailyStockModel;
     }

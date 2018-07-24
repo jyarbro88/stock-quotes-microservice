@@ -54,7 +54,6 @@ public class QuoteController {
         String stockSymbol = tickerSymbolAndCompanyName.get(1);
         String companyName = tickerSymbolAndCompanyName.get(2);
 
-
         DailyStockModel dailyStockModel = stockModelBuilder.buildDailyStockModel(stockId, dateToSearch);
         dailyStockModel.setTickerSymbol(stockSymbol);
         dailyStockModel.setCompanyName(companyName);
