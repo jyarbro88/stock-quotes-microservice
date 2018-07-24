@@ -2,6 +2,7 @@ package com.microservice.quotes.controllers;
 
 import com.microservice.quotes.models.DailyStockModel;
 import com.microservice.quotes.models.QuoteModel;
+import com.microservice.quotes.models.TempStockModel;
 import com.microservice.quotes.repositories.QuoteRepository;
 import com.microservice.quotes.utilities.MicroServiceConnector;
 import com.microservice.quotes.utilities.StockModelBuilder;
@@ -48,15 +49,11 @@ public class QuoteController {
         MicroServiceConnector microServiceConnector = new MicroServiceConnector();
         StockModelBuilder stockModelBuilder = new StockModelBuilder(quoteRepository);
 
-        List<String> tickerSymbolAndCompanyName = microServiceConnector.getTickerSymbolAndCompanyName(symbolToFind, restTemplate);
+        TempStockModel foundStockModel = microServiceConnector.getTickerSymbolAndCompanyName(symbolToFind, restTemplate);
 
-        String stockId = tickerSymbolAndCompanyName.get(0);
-        String stockSymbol = tickerSymbolAndCompanyName.get(1);
-        String companyName = tickerSymbolAndCompanyName.get(2);
-
-        DailyStockModel dailyStockModel = stockModelBuilder.buildDailyStockModel(stockId, dateToSearch);
-        dailyStockModel.setTickerSymbol(stockSymbol);
-        dailyStockModel.setCompanyName(companyName);
+        DailyStockModel dailyStockModel = stockModelBuilder.buildDailyStockModel(foundStockModel.getId(), dateToSearch);
+        dailyStockModel.setTickerSymbol(foundStockModel.getSymbol());
+        dailyStockModel.setCompanyName(foundStockModel.getCompanyName());
 
         return dailyStockModel.toString();
     }

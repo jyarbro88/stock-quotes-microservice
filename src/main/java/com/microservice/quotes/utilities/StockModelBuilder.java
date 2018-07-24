@@ -3,7 +3,8 @@ package com.microservice.quotes.utilities;
 import com.microservice.quotes.models.DailyStockModel;
 import com.microservice.quotes.models.QuoteModel;
 import com.microservice.quotes.repositories.QuoteRepository;
-import com.sun.org.apache.xpath.internal.operations.Quo;
+import com.netflix.discovery.converters.Auto;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
